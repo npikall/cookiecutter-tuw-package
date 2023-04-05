@@ -16,7 +16,7 @@ You can also install source, see the [official installation documentation](https
 Now if you want to generate an initial python project skeleton in TU Wien style, navigate to the folder which should contain the project root project folder and run this command:
 
 ```bash
-cookiecutter https://github.com/audreyr/cookiecutter-pypackage.git
+cookiecutter https://github.com/TUW-GEO/cookiecutter-tuw-package
 ```
 
 This will prompt with some configuration parameters, e.g., package name, author, etc. for most of which reasonable default values are provided.
