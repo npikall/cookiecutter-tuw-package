@@ -5,6 +5,7 @@ stages:
 test:
   image: swamydev/geo-write:latest
   script:
+    - pip install -e .[test]
     - make test
 {%- if cookiecutter.approvaltests_geo_data_root %}
   after_script:
