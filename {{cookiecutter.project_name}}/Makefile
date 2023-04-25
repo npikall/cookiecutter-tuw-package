@@ -1,12 +1,13 @@
-.PHONY: help clean setup test
+SHELL = /bin/bash
+.PHONY: help clean install test version dist
 
 help:
 	@echo "make clean"
 	@echo " clean all python build/compilation files and directories"
 	@echo "make install"
-	@echo " install dependencies in active python environment"
+	@echo " install dependencies in local venv environment and creates a new one if it doesn't exist yet"
 	@echo "make test"
-	@echo " install dependencies for tests in active python environment if necessary and run test with coverage"
+	@echo " run test with coverage"
 	@echo "make version"
 	@echo " update _version.py with current version tag"
 	@echo "make dist"
@@ -21,23 +22,20 @@ clean:
 	rm --force --recursive build/
 	rm --force --recursive dist/
 	rm --force --recursive *.egg-info
-	rm --force .install.done
-	rm --force .install.test.done
 
-install:
-	pip install --upgrade pip setuptools
-	pip install -e .
+venv/bin/activate:
+	python3 -m venv venv
+	source venv/bin/activate && pip install --upgrade pip setuptools
+	source venv/bin/activate && pip install pygdal=="$(shell gdal-config --version).*"
 
-.install.test.done:
-	pip install --upgrade pip setuptools
-	pip install -e .[test]
-	touch .install.test.done
+install: venv/bin/activate
+	source venv/bin/activate && pip install -e .[test]
 
-test: .install.test.done
+test:
 	pytest -rsx --verbose --color=yes --cov={{cookiecutter.project_slug}} --cov-report term-missing
 
 version:
-	echo "__version__ = \"$(shell git describe --always --tags --abbrev=0)\"\n__commit__ = \"$(shell git rev-parse --short HEAD)\"" > src/{{cookiecutter.project_slug}}/_version.py
+	echo -e "__version__ = \"$(shell git describe --always --tags --abbrev=0)\"\n__commit__ = \"$(shell git rev-parse --short HEAD)\"" > src/{{cookiecutter.project_slug}}/_version.py
 
 dist: version
 	pip3 install build twine
