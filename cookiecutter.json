@@ -6,6 +6,7 @@
   "url": "",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
   "approvaltests_geo_data_root": "",
+  "approvaltests_geo_data_mount": "{{ cookiecutter.approvaltests_geo_data_root }}",
   "approvaldata_timestamp": "",
   "vsc_repo": "gitlab"
 }

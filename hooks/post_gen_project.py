@@ -18,6 +18,9 @@ if __name__ == '__main__':
     if not "{{ cookiecutter.approvaltests_geo_data_root }}":
         remove_file('pytest.ini')
 
+    if not "{{ cookiecutter.approvaltests_geo_data_root }}" or "{{ cookiecutter.approvaltests_geo_data_root }}" == "{{ cookiecutter.approvaltests_geo_data_mount }}":
+        remove_dir('ci')
+
     if "{{ cookiecutter.vsc_repo }}" == 'gitlab':
         remove_dir(".github")
     elif "{{ cookiecutter.vsc_repo }}" == 'github':
