@@ -7,17 +7,12 @@ test:
   script:
     - pip install -e .[test]
     - make test
-{%- if cookiecutter.approvaltests_geo_data_root %}
-  after_script:
-    - mkdir approvals-artifacts
-    - mv {{ cookiecutter.approvaltests_geo_data_root }}/approved/**/*received* ./approvals-artifacts || true
-{%- endif %}
   coverage: '/^TOTAL.+?(\d+\%)$/'
 {%- if cookiecutter.approvaltests_geo_data_root %}
   artifacts:
     when: on_failure
     paths:
-      - ./approvals-artifacts/*received*
+      - {{ cookiecutter.approvaltests_geo_data_mount }}/approved/**/*received*
     expire_in: 1 day
 {%- endif %}
 
