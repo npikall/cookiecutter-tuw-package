@@ -10,7 +10,8 @@ else
 	cat <<- EOF > ~/.config/pip/pip.conf
 	[global]
 	extra-index-url =
-	    https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/10/-/packages/pypi/simple/
-	    https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/104/-/packages/pypi/simple/
+{%- for pypi_id in cookiecutter.external_pypis.split(',') %}
+	    https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/{{ pypi_id }}/-/packages/pypi/simple/
+{%- endfor %}
 	EOF
 fi

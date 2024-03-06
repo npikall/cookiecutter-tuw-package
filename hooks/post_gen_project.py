@@ -18,7 +18,16 @@ if __name__ == '__main__':
     if not "{{ cookiecutter.approvaltests_geo_data_root }}":
         remove_file('pytest.ini')
 
-    if not "{{ cookiecutter.approvaltests_geo_data_root }}" or "{{ cookiecutter.approvaltests_geo_data_root }}" == "{{ cookiecutter.approvaltests_geo_data_mount }}":
+    has_approval = "{{ cookiecutter.approvaltests_geo_data_root }}" and ("{{ cookiecutter.approvaltests_geo_data_root }}" != "{{ cookiecutter.approvaltests_geo_data_mount }}")
+    if not has_approval:
+        remove_file('ci/setup-approval-testdata.sh')
+    has_pypi = "{{ cookiecutter.external_pypis }}"
+    if not has_pypi:
+        remove_file('ci/add-pypi-indices.sh')
+    has_docker = {{ cookiecutter.package_docker }}
+    if not has_docker:
+        remove_file('ci/deploy-docker-image.sh')
+    if not has_approval and not has_pypi and not has_docker:
         remove_dir('ci')
 
     if "{{ cookiecutter.vsc_repo }}" == 'gitlab':

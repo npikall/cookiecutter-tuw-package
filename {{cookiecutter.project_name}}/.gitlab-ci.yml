@@ -4,9 +4,15 @@ stages:
 
 .test-template:
   image: swamydev/geo-write:latest
+{%- if (cookiecutter.approvaltests_geo_data_root and (cookiecutter.approvaltests_geo_data_root != cookiecutter.approvaltests_geo_data_mount)) or cookiecutter.external_pypis %}
   before_script:
+{%- if cookiecutter.approvaltests_geo_data_root and (cookiecutter.approvaltests_geo_data_root != cookiecutter.approvaltests_geo_data_mount) %}
     - ci/setup-approval-testdata.sh
-
+{%- endif %}
+{%- if cookiecutter.external_pypis %}
+    - ci/add-pypi-indices.sh ${CI_JOB_TOKEN}
+{%- endif %}
+{%- endif %}
 {%- if cookiecutter.approvaltests_geo_data_root %}
   after_script:
     - mkdir approvals-artifacts
@@ -20,6 +26,8 @@ stages:
       - ./approvals-artifacts/*received*
     expire_in: 1 day
 {%- endif %}
+  tags:
+    - python
 
 test-main:
   extends: .test-template
@@ -53,9 +61,9 @@ deploy-pypi:
     - if: $CI_PIPELINE_SOURCE == "push"
       when: manual
   tags:
-    - linux
+    - python
 
-{%- if cookiecutter.approvaltests_geo_data_root %}
+{%- if cookiecutter.package_docker %}
 package-docker:
   stage: package
   image: docker:24.0.5
