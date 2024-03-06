@@ -8,5 +8,6 @@
   "approvaltests_geo_data_root": "",
   "approvaltests_geo_data_mount": "{{ cookiecutter.approvaltests_geo_data_root }}",
   "approvaldata_timestamp": "",
-  "vsc_repo": "gitlab"
+  "vsc_repo": "gitlab",
+  "package-docker": false
 }
