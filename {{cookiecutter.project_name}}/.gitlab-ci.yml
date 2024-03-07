@@ -62,6 +62,7 @@ deploy-pypi:
   tags:
     - python
 
+
 {%- if cookiecutter.package_docker %}
 package-docker:
   stage: package
