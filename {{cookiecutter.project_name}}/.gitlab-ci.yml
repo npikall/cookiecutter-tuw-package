@@ -1,6 +1,9 @@
 stages:
   - test
   - deploy
+{%- if cookiecutter.package_docker %}
+  - package
+{%- endif %}
 
 .test-template:
   stage: test
