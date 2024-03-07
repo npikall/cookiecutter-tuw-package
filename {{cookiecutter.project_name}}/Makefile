@@ -32,7 +32,7 @@ install: venv/bin/activate
 	source venv/bin/activate && pip install -e .[test]
 
 test:
-	pytest -rsx --verbose --color=yes --cov={{cookiecutter.project_slug}} --cov-report term-missing
+	pytest tests/ -rsx --verbose --color=yes --cov={{cookiecutter.project_slug}} --cov-report term-missing
 
 version:
 	echo -e "__version__ = \"$(shell git describe --always --tags --abbrev=0)\"\n__commit__ = \"$(shell git rev-parse --short HEAD)\"" > src/{{cookiecutter.project_slug}}/_version.py
