@@ -8,22 +8,22 @@ stages:
 .test-template:
   stage: test
   image: swamydev/geo-write:latest
-{%- if (cookiecutter.approvaltests_geo_data_root and (cookiecutter.approvaltests_geo_data_root != cookiecutter.approvaltests_geo_data_mount)) or cookiecutter.external_pypis %}
+{%- if (cookiecutter.approvaltests_geo_data_at_ci_vm and (cookiecutter.approvaltests_geo_data_at_ci_vm != cookiecutter.approvaltests_geo_data_root)) or cookiecutter.external_pypis %}
   before_script:
-{%- if cookiecutter.approvaltests_geo_data_root and (cookiecutter.approvaltests_geo_data_root != cookiecutter.approvaltests_geo_data_mount) %}
+{%- if cookiecutter.approvaltests_geo_data_at_ci_vm and (cookiecutter.approvaltests_geo_data_at_ci_vm != cookiecutter.approvaltests_geo_data_root) %}
     - ci/setup-approval-testdata.sh
 {%- endif %}
 {%- if cookiecutter.external_pypis %}
     - ci/add-pypi-indices.sh ${CI_JOB_TOKEN}
 {%- endif %}
 {%- endif %}
-{%- if cookiecutter.approvaltests_geo_data_root %}
+{%- if cookiecutter.approvaltests_geo_data_at_ci_vm %}
   after_script:
     - mkdir approvals-artifacts
-    - mv {{ cookiecutter.approvaltests_geo_data_mount }}/approved/**/*received* ./approvals-artifacts || true
+    - mv {{ cookiecutter.approvaltests_geo_data_root }}/approved/**/*received* ./approvals-artifacts || true
 {%- endif %}
   coverage: '/^TOTAL.+?(\d+\%)$/'
-{%- if cookiecutter.approvaltests_geo_data_root %}
+{%- if cookiecutter.approvaltests_geo_data_at_ci_vm %}
   artifacts:
     when: on_failure
     paths:
@@ -31,12 +31,16 @@ stages:
     expire_in: 1 day
 {%- endif %}
   tags:
+{%- if cookiecutter.approvaltests_geo_data_at_ci_vm %}
     - python
+{%- else %}
+    - eodc-storage
+{%- endif %}
 
 test-main:
   extends: .test-template
   script:
-    - pip install -e .[test]
+    - make uv
     - make test
   rules:
     - if: '$CI_COMMIT_TAG == null'
@@ -45,8 +49,9 @@ test-main:
 test-release:
   extends: .test-template
   script:
-    - pip install -e .[test]
-    - make test
+    - uv add gdal=="$(shell gdal-config --version).*" --group test
+    - pytest tests/ -rsx --verbose --color=yes --cov={{cookiecutter.project_slug}} --cov-report term-missing --junitxml ./ci-test-results.xml
+    - coverage json
   rules:
     - if: '$CI_COMMIT_TAG'
       when: always
@@ -65,13 +70,13 @@ deploy-pypi:
   tags:
     - python
 
-
 {%- if cookiecutter.package_docker %}
 package-docker:
   stage: package
   image: docker:24.0.5
   needs:
     - deploy-pypi
+    - job: test-release
   services:
     - docker:24.0.5-dind
   before_script:
@@ -82,5 +87,22 @@ package-docker:
     - if: $CI_COMMIT_TAG
       when: on_success
   tags:
-    - docker
+    - dind
+
+package-trunk-docker:
+  stage: package
+  image: docker:27.1.1
+  needs:
+    - job: test-main
+  services:
+    - docker:27.1.1-dind
+  before_script:
+    - apk add --no-cache bash
+  script:
+    - ci/deploy-trunk-docker-image.sh $CI_JOB_TOKEN $CI_REGISTRY_USER $CI_REGISTRY_PASSWORD $CI_REGISTRY $CI_REGISTRY_IMAGE
+  rules:
+    - if: '$CI_COMMIT_TAG == null'
+      when: on_success
+  tags:
+    - dind
 {%- endif %}

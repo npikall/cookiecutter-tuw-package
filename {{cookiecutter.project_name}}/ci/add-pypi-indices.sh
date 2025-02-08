@@ -2,16 +2,25 @@
 
 TOKEN=$1
 
-if [ -f ~/.config/pip/pip.conf ]; then
-	echo "pip.conf already exists, you've to add python indices manually."
+if [ -f ~/.config/uv/uv.toml ]; then
+	echo "uv.toml already exists, you've to add python indices manually."
 else
-	echo "creating pip.conf..."
-	mkdir -p ~/.config/pip
-	cat <<- EOF > ~/.config/pip/pip.conf
-	[global]
-	extra-index-url =
+	echo "creating uv.toml..."
+	mkdir -p ~/.config/uv
+	cat <<- EOF > ~/.config/uv/uv.toml
 {%- for pypi_id in cookiecutter.external_pypis.split(',') %}
-	    https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/{{ pypi_id }}/-/packages/pypi/simple/
+	[[index]]
+	https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/{{ pypi_id }}/-/packages/pypi/simple/
 {%- endfor %}
+	EOF
+fi
+
+if [ -f ~/.netrc ]; then
+	echo ".netrc already exists, you've to add login credentials manually."
+else
+	echo "creating .netrc..."
+	mkdir -p ~/.config/uv
+	cat <<- EOF > ~/.netrc
+	machine git.eodc.eu login gitlab-ci-token password ${TOKEN}
 	EOF
 fi

@@ -50,6 +50,4 @@ MANIFEST
 # Per-project virtualenvs
 .venv*/
 venv
-
-# make file markers
-.install*
+uv.lock
