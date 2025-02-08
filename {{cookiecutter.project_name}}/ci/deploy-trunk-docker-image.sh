@@ -17,7 +17,7 @@ ${SCRIPT_DIR}/add-pypi-indices.sh $JOB_TOKEN
 pushd "${SCRIPT_DIR}/.." || exit
 
 docker login -u $USER -p $SECRET $REGISTRY
-docker build --secret id=pypi,src=$HOME/.config/uv/uv.toml --secret id=netrc,src=$HOME/.netrc -t $REGISTRY_IMAGE:$IMAGE_TAG -f ./trunk.Dockerfile .
+docker build --secret id=pypi,src=$HOME/.config/uv/uv.toml --secret id=netrc,src=$HOME/.netrc -t $REGISTRY_IMAGE:$IMAGE_TAG -f docker/trunk.Dockerfile .
 docker push $REGISTRY_IMAGE:$IMAGE_TAG
 
 popd || exit
