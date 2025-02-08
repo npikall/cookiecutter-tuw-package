@@ -27,6 +27,7 @@ if __name__ == '__main__':
     has_docker = {{ cookiecutter.package_docker }}
     if not has_docker:
         remove_file('ci/deploy-docker-image.sh')
+        remove_file('ci/deploy-trunk-docker-image.sh')
         remove_dir('docker')
     if not has_approval and not has_pypi and not has_docker:
         remove_dir('ci')
