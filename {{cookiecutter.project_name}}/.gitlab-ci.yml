@@ -31,7 +31,7 @@ stages:
     expire_in: 1 day
 {%- endif %}
   tags:
-{%- if cookiecutter.approvaltests_geo_data_at_root %}
+{%- if cookiecutter.approvaltests_geo_data_root %}
     - python
 {%- else %}
     - eodc-storage
