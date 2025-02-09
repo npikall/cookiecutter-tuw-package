@@ -7,6 +7,6 @@ ENV NETRC=/etc/netrc
 ENV PATH=/root/.local/bin:$PATH
 COPY ./ ./src
 RUN --mount=type=secret,id=pypi,uid=84242,target=/etc/uv/uv.toml --mount=type=secret,id=netrc,uid=84242,target=/etc/netrc/.netrc \
-    cd ./src && uv add gdal=="$(gdal-config --version).*" && uv sync --group trunk
+    cd ./src && make uv
 
 ENTRYPOINT ["./src/.venv/bin/{{ cookiecutter.project_name }}"]

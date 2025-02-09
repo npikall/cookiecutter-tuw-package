@@ -24,9 +24,15 @@ clean:
 	rm --force --recursive *.egg-info
 
 .venv/bin/activate:
-	uv add gdal=="$(shell gdal-config --version).*" && uv sync --group test --group trunk
+	uv sync --group test --group trunk --no-install-package gdal && uv pip install gdal=="$(shell gdal-config --version).*"
 
 uv: .venv/bin/activate
+
+uv-local: uv
+	uv pip install -r local-requirements.txt
+
+uv-release: .venv/bin/activate
+	uv sync --group test --no-sources --no-install-package gdal && uv pip install gdal=="$(shell gdal-config --version).*"
 
 test:
 	source .venv/bin/activate && pytest tests/ -rsx --verbose --color=yes --cov={{cookiecutter.project_slug}} --cov-report term-missing

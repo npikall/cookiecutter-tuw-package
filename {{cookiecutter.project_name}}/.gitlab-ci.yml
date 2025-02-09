@@ -49,7 +49,7 @@ test-main:
 test-release:
   extends: .test-template
   script:
-    - uv add gdal=="$(shell gdal-config --version).*" --group test
+    - make uv-release
     - pytest tests/ -rsx --verbose --color=yes --cov={{cookiecutter.project_slug}} --cov-report term-missing --junitxml ./ci-test-results.xml
     - coverage json
   rules:
