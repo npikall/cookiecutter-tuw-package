@@ -31,6 +31,6 @@ Some cookiecutter parameters have special behaviour, and depend on their value c
 
 This currently only supports "gitlab" or "github", and depended on which one you choose, it generates a basic CI test and package pipeline for you, using either gitlab or github services.
 
-### approvaltests_geo_data_at_ci_vm and approvaldata_timestamp
+### approvaltests_geo_data_root and approvaldata_timestamp
 
 If you want to use the [ApprovalTests.Python.GeoExtensions](https://github.com/TUW-GEO/ApprovalTests.Python.GeoExtensions) you can specify the geo approval test data root and the timestamp of the initial approval data data version. This will generate a `pytest.ini` file with the basic geo approval tests configurations.

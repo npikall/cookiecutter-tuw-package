@@ -15,10 +15,10 @@ def remove_dir(dir):
 
 if __name__ == '__main__':
 
-    if not "{{ cookiecutter.approvaltests_geo_data_at_ci_vm }}":
+    if not "{{ cookiecutter.approvaltests_geo_data_root }}":
         remove_file('pytest.ini')
 
-    has_approval = "{{ cookiecutter.approvaltests_geo_data_at_ci_vm }}" and ("{{ cookiecutter.approvaltests_geo_data_at_ci_vm }}" != "{{ cookiecutter.approvaltests_geo_data_root }}")
+    has_approval = "{{ cookiecutter.approvaltests_geo_data_root }}" and ("{{ cookiecutter.approvaltests_geo_data_at_ci_vm }}" != "{{ cookiecutter.approvaltests_geo_data_root }}")
     if not has_approval:
         remove_file('ci/setup-approval-testdata.sh')
     has_pypi = "{{ cookiecutter.external_pypis }}"
