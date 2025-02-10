@@ -32,9 +32,9 @@ stages:
 {%- endif %}
   tags:
 {%- if cookiecutter.approvaltests_geo_data_root %}
-    - python
-{%- else %}
     - eodc-storage
+{%- else %}
+    - python
 {%- endif %}
 
 test-main:
