@@ -7,7 +7,7 @@ stages:
 
 .test-template:
   stage: test
-  image: swamydev/geo-write:latest
+  image: swamydev/geo-python:3.12-slim-bookworm
 {%- if (cookiecutter.approvaltests_geo_data_root and (cookiecutter.approvaltests_geo_data_at_ci_vm != cookiecutter.approvaltests_geo_data_root)) or cookiecutter.external_pypis %}
   before_script:
 {%- if cookiecutter.approvaltests_geo_data_root and (cookiecutter.approvaltests_geo_data_at_ci_vm != cookiecutter.approvaltests_geo_data_root) %}
