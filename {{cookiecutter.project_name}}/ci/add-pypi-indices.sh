@@ -10,7 +10,7 @@ else
 	cat <<- EOF > ~/.config/uv/uv.toml
 {%- for pypi_id in cookiecutter.external_pypis.split(',') %}
 	[[index]]
-	https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/{{ pypi_id }}/-/packages/pypi/simple/
+	url = "https://gitlab-ci-token:${TOKEN}@git.eodc.eu/api/v4/groups/{{ pypi_id }}/-/packages/pypi/simple/"
 {%- endfor %}
 	EOF
 fi
