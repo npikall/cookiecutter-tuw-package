@@ -40,9 +40,6 @@ dev = [
     "ruff",
 ]
 
-[project.scripts]
-s2flood = "s2flood:main"
-
 [tool.ruff]
 line-length = 79
 lint.fixable = ["ALL"]

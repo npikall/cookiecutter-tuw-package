@@ -13,29 +13,29 @@ def remove_dir(dir):
     shutil.rmtree(os.path.join(PROJECT_DIRECTORY, dir))
 
 
-if __name__ == '__main__':
-
-    if not "{{ cookiecutter.approvaltests_geo_data_root }}":
-        remove_file('pytest.ini')
-
-    has_approval = "{{ cookiecutter.approvaltests_geo_data_root }}" and ("{{ cookiecutter.approvaltests_geo_data_at_ci_vm }}" != "{{ cookiecutter.approvaltests_geo_data_root }}")
+if __name__ == "__main__":
+    has_approval = "{{ cookiecutter.approvaltests_geo_data_root }}" and (
+        "{{ cookiecutter.approvaltests_geo_data_at_ci_vm }}"
+        != "{{ cookiecutter.approvaltests_geo_data_root }}"
+    )
     if not has_approval:
-        remove_file('ci/setup-approval-testdata.sh')
+        remove_file("ci/setup-approval-testdata.sh")
     has_pypi = "{{ cookiecutter.external_pypis }}"
     if not has_pypi:
-        remove_file('ci/add-pypi-indices.sh')
-    has_docker = {{ cookiecutter.package_docker }}
+        remove_file("ci/add-pypi-indices.sh")
+    has_docker = {{cookiecutter.package_docker}}
     if not has_docker:
-        remove_file('ci/deploy-docker-image.sh')
-        remove_file('ci/deploy-trunk-docker-image.sh')
-        remove_dir('docker')
+        remove_file("ci/deploy-docker-image.sh")
+        remove_file("ci/deploy-trunk-docker-image.sh")
+        remove_dir("docker")
     if not has_approval and not has_pypi and not has_docker:
-        remove_dir('ci')
+        remove_dir("ci")
 
-    if "{{ cookiecutter.vsc_repo }}" == 'gitlab':
+    if "{{ cookiecutter.vsc_repo }}" == "gitlab":
         remove_dir(".github")
-    elif "{{ cookiecutter.vsc_repo }}" == 'github':
+    elif "{{ cookiecutter.vsc_repo }}" == "github":
         remove_file(".gitlab-ci.yml")
     else:
         raise NotImplementedError(
-            "The repository {{ cookiecutter.vsc_repo }} specified in cookiecutter.vsc_repo, is currently not supported.\nSpecify either 'gitlab' or 'github'")
+            "The repository {{ cookiecutter.vsc_repo }} specified in cookiecutter.vsc_repo, is currently not supported.\nSpecify either 'gitlab' or 'github'"
+        )
