@@ -23,6 +23,9 @@ classifiers = [
 Repository = "{{cookiecutter.url}}"
 {%- endif %}
 
+[project.scripts]
+{{cookiecutter.project_slug}} = "{{cookiecutter.project_slug}}:main"
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
@@ -32,4 +35,32 @@ test = [
     "pytest",
     "pytest-cov"
 ]
-trunk = []
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[project.scripts]
+s2flood = "s2flood:main"
+
+[tool.ruff]
+line-length = 79
+lint.fixable = ["ALL"]
+lint.select = ["ALL"]
+lint.ignore = [
+    "ANN401", # Any type in func args are not allowed
+    "D203",   # no blank lines between class def and docstring
+    "D213",   # multiline summary should start in first line
+    "PGH",    # pygrep hooks are ignored
+    "TD002",  # todo author assignment is ignored
+    "TD003",  # todo issue assignment is ignored
+]
+
+[tool.ruff.format]
+line-ending = "auto"
+docstring-code-line-length = 79
+
+[tool.pytest.ini_options]
+approvaltests_geo_data_root = "{{ cookiecutter.approvaltests_geo_data_root }}"
+approvaltests_geo_input = "input/{{ cookiecutter.approvaldata_timestamp }}/"
+approvaltests_geo_approved = "approved/{{ cookiecutter.approvaldata_timestamp }}/"
