@@ -16,7 +16,7 @@ clean:
 
 [private]
 venv:
-	uv sync --group test --group trunk --no-install-package gdal && uv pip install gdal=="$(shell gdal-config --version).*"
+	uv sync --group test --group dev --no-install-package gdal && uv pip install gdal=="$(shell gdal-config --version).*"
 
 # install dependencies in local venv environment and creates a new one if it doesn't exist yet using uv
 uv: venv
@@ -59,3 +59,7 @@ types:
 
 # lint and format python code using ruff
 ruff: lint format
+
+# setup the pre-commit hooks
+hooks:
+    pre-commit install --hook-type commit-msg --hook-type pre-push
