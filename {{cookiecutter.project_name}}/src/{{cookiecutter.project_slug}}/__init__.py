@@ -1,7 +1,12 @@
-from {{ cookiecutter.project_slug }}._version import __commit__
-from {{ cookiecutter.project_slug }}._version import __version__
+"""{{ cookiecutter.project_slug }}: Package to do ..."""
 
-name = "{{ cookiecutter.project_slug }}"
+import importlib.metadata
 
-def main() -> None:
+__version__ = importlib.metadata.version(__name__)
+
+NAME = "{{ cookiecutter.project_slug }}"
+
+
+def main(name: str = NAME) -> None:
+    """Entrypoint for the CLI."""
     print(f"Hello from {name}")
